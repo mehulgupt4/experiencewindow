@@ -91,6 +91,20 @@
     input:checked + .slider:before {
       transform: translateX(20px); /* Move the slider knob when checked */
     }
+
+    /* Media Query for smaller screens (phones) */
+    @media screen and (max-width: 600px) {
+      .video-container {
+        width: 280px; /* Make the video container smaller */
+        height: 280px; /* Adjust height to match width */
+        margin-bottom: 30px; /* Reduce the space between the video container and the switch */
+      }
+
+      .switch {
+        width: 45px; /* Adjust the width of the switch */
+        height: 25px; /* Adjust the height of the switch */
+      }
+    }
   </style>
 </head>
 <body>
@@ -146,6 +160,11 @@
     const videoContainer = document.getElementById('videoContainer');
     const videoElement = document.getElementById('video');
 
+    // Set default state to off when page loads
+    videoSwitch.checked = false;
+    videoContainer.style.backgroundColor = 'black'; // Default background is black
+    videoElement.style.opacity = 0; // Video is hidden
+
     videoSwitch.addEventListener('change', function() {
       if (videoSwitch.checked) {
         // When the switch is ON, show the video and set background to black
@@ -162,13 +181,12 @@
       }
     });
 
-    // Initialize the video source based on the time of day
+    // Initialize the video source based on the time of day when the page loads
     window.onload = function() {
       getVideoForTimeOfDay();
-      videoSwitch.checked = true;  // Start with video ON
-      videoContainer.style.backgroundColor = 'black';  // Set background to black initially
     };
   </script>
 
 </body>
 </html>
+
