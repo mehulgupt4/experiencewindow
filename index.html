@@ -23,11 +23,25 @@
       height: 400px;
       position: relative;
       overflow: hidden;
-      border: 20px solid #f0f0f0; /* Border color same as background */
-      box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2); /* Drop shadow effect */
+      border: 40px solid white; /* Increased the white border thickness */
+      box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2), -10px -10px 0 rgba(0, 0, 0, 0); /* Shadow on right and bottom */
       background-color: black; /* Default background when off */
       transition: background-color 0.3s ease; /* Smooth transition for color change */
       margin-bottom: 40px; /* Increased gap between the video container and the switch */
+      position: relative; /* Ensure proper stacking of elements */
+    }
+
+    /* Add a thin frame around the white border */
+    .video-container::before {
+      content: "";
+      position: absolute;
+      top: -10px; /* Move 10px outside the border */
+      left: -10px; /* Move 10px outside the border */
+      right: -10px; /* Move 10px outside the border */
+      bottom: -10px; /* Move 10px outside the border */
+      border: 10px solid #b0916b; /* Color of the frame */
+      pointer-events: none; /* Ensure it doesn't interfere with user interactions */
+      border-radius: 10px; /* Optionally, add rounded corners to the frame */
     }
 
     /* Video styling */
@@ -36,7 +50,8 @@
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: opacity 0.3s ease;
+      transition: visibility 0s, opacity 0.3s ease; /* Transition for opacity and visibility */
+      visibility: visible; /* Ensure video is visible by default */
     }
 
     /* Switch styling */
@@ -118,7 +133,7 @@
 
   <!-- Video Container -->
   <div class="video-container" id="videoContainer">
-    <video id="video" autoplay muted loop>
+    <video id="video" autoplay loop>
       <!-- Default video source, will be changed by JavaScript -->
       <source id="videoSource" src="" type="video/mp4">
       Your browser does not support the video tag.
@@ -170,20 +185,23 @@
     // Set default state to off when page loads
     videoSwitch.checked = false;
     videoContainer.style.backgroundColor = 'black'; // Default background is black
-    videoElement.style.opacity = 0; // Video is hidden
+    videoElement.style.visibility = 'hidden'; // Hide video initially
+    videoElement.muted = true; // Start muted
 
     videoSwitch.addEventListener('change', function() {
       if (videoSwitch.checked) {
-        // When the switch is ON, show the video and set background to black
+        // When the switch is ON, show the video, unmute, and set background to black
         videoContainer.style.backgroundColor = 'black';  // Show video on black background
-        videoElement.style.opacity = 1;  // Make the video visible
+        videoElement.style.visibility = 'visible';  // Make the video visible
         videoElement.play();  // Play the video
+        videoElement.muted = false;  // Unmute the video
       } else {
         // When the switch is OFF, turn the video to black (simulate off state)
         videoContainer.style.backgroundColor = 'black';  // Background stays black
-        videoElement.style.opacity = 0;  // Hide the video (make it "invisible")
+        videoElement.style.visibility = 'hidden';  // Hide the video
         videoElement.pause();  // Pause the video
-        // Optionally, we can reset the video to start when turned on again:
+        videoElement.muted = true;  // Mute the video
+        // Optionally, reset the video to start when turned on again:
         videoElement.currentTime = 0;
       }
     });
